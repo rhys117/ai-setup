@@ -22,7 +22,7 @@ See the following repositories for the where I found most of these rules:
 - https://github.com/GreatScottyMac/roo-code-memory-bank
 - https://github.com/Mawla/cursor_rules/tree/main/.cursor/rules
 
-## Other reccommendations
+## Other recommendations
 
 #### Setup a tech stack specific rule. Here's an example.
 ```md
