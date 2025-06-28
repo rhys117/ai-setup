@@ -51,3 +51,4 @@ when writing code or prompts. Follow the conventions and best practices outlined
 ## Reading List
 
 Ruvnet - https://github.com/ruvnet/ruvnet
+Ruvnet Gist on Claude - https://gist.github.com/ruvnet/e8bb444c6149e6e060a785d1a693a194#file-claude-md
