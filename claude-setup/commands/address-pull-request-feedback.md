@@ -1,0 +1,2 @@
+Analyze the pull request comments for this branch using 'gh pr view --comments' and 'gh pr diff', then identify the key feedback
+themes, required changes, and technical concerns. Create a comprehensive development plan that addresses all reviewer feedback, prioritizes critical issues, and breaks down the work into logical phases. Focus on understanding the scope and complexity of addressing the PR comments.
