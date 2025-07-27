@@ -111,7 +111,5 @@ bundle exec rspec     # Run RSpec tests
 1. Always check existing patterns before implementing new features
 2. Use Rails generators when appropriate
 3. Follow TDD practices
-4. Query memory for similar implementations: `node .llms/memory-search.js query "tags:topic"`
-5. Check available tags before adding new ones: `node .llms/memory-search.js tags`
-6. Maintain consistent code style with existing codebase
-7. Run linters and tests before marking tasks complete
+4. Maintain consistent code style with existing codebase
+5. Run linters and tests before marking tasks complete
