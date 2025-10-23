@@ -2,22 +2,8 @@
 
 ## MUST FOLLOW RULES
 - NEVER commit to the `main` branch
-- Complete changes on an appropriate feature branch (refer to deveopment procedure below)
+- Complete changes on an appropriate feature branch (refer to development procedure below)
 - Commit changes often. Follow conventional commits pattern.
-
-## Development Procedure
-YOU NOW MUST IMMEDIATELY READ THE [DEVELOPMENT_PROCEDURE.md](.llms/DEVELOPMENT_PROCEDURE.md) FILE for the structured feature development workflow including:
-- Plan file tracking (`.llms/.dev-plan-*.yaml`)
-- Development process
-- Working memory system (`.llms/dev-memory.json`)
-- Tag management and search tools (`.llms/memory-search.js`)
-- Size-based workflow mapping
-
-WHEN MOVING ONTO THE NEXT STEP IN THE DEVELOPMENT PROCEDURE YOU MUST:
-- Re-Read the DEVELOPMENT_PROCEDURE.md file
-- Verify that you do not need to revisit an earlier step
-- Update the development plan
-- announce that you're moving into the next step
 
 ## Project Overview
 "Let Me Know" is a Ruby on Rails 8.0 event management and RSVP system.
