@@ -1,0 +1,172 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git commit:*)",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/exhale-reminder.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/inject-domain-map.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git commit:*)",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/protect-main.sh",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "if": "Bash(git push:*)",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/protect-main.sh",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "if": "Bash(git commit:*)",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/ui-screenshot-check.sh",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "if": "Bash(gh pr create:*)",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/enforce-pr-format.sh",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "if": "Bash(gh pr create:*)",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/pre-pr-review.sh",
+            "timeout": 300
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__playwright__browser_navigate",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/playwright-advisory.sh",
+            "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/view-edit-advisory.sh",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/service-design-advisory.sh",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/controller-design-advisory.sh",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/migration-design-advisory.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/clear-advisory-sentinels.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(md5:*)",
+      "WebSearch",
+      "Bash(bundle exec rspec:*)",
+      "Bash(bundle exec rubocop:*)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_hover",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_evaluate",
+      "Bash(rails generate:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "mcp__playwright__browser_type",
+      "mcp__playwright__browser_close",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_file_upload",
+      "mcp__playwright__browser_console_messages",
+      "mcp__playwright__browser_wait_for",
+      "mcp__playwright__browser_fill_form",
+      "Skill(create-resource-controller)",
+      "mcp__playwright__browser_select_option",
+      "mcp__playwright__browser_network_requests",
+      "mcp__playwright__browser_run_code",
+      "Bash(xargs:*)",
+      "Bash(bundle exec srb tc:*)",
+      "Bash(bundle exec rails runner:*)",
+      "Bash(cat:*)",
+      "mcp__playwright__browser_resize",
+      "Bash(git checkout:*)",
+      "Bash(bin/rails generate:*)",
+      "Bash(grep:*)",
+      "Skill(manual-testing)",
+      "mcp__playwright__browser_handle_dialog",
+      "Bash(rails routes:*)",
+      "Bash(bundle exec rails:*)",
+      "Bash(bin/rails routes:*)",
+      "mcp__playwright__browser_tabs",
+      "Bash(spring stop:*)",
+      "Skill(code-reviewer)",
+      "mcp__playwright__browser_press_key",
+      "Bash(gh pr create:*)",
+      "mcp__playwright__browser_drag",
+      "Skill(sorbet-inline-rbs)",
+      "Bash(bundle show:*)",
+      "WebFetch(domain:primer.style)",
+      "Bash(bin/rails runner:*)",
+      "Skill(ui-components)",
+      "Bash(head:*)",
+      "Bash(bin/rspec:*)",
+      "Bash(bundle exec parallel_rspec:*)"
+    ],
+    "deny": []
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "playwright"
+  ]
+}
