@@ -13,7 +13,10 @@ fi
 
 cat <<'JSON'
 {
-  "additionalContext": "Exhale. You just committed a feature/fix. Review the changes for simplicity, duplication, and design quality. If cleanup is needed, run /simplify-with-analysis. Do not skip this step."
+  "hookSpecificOutput": {
+    "hookEventName": "PostToolUse",
+    "additionalContext": "Exhale. You just committed a feature/fix. Review the changes for simplicity, duplication, and design quality. Run `bin/diff-quality` to check for rubycritic regressions and run related specs against main. For a deeper design review (higher token cost), the user can run /simplify-with-analysis explicitly. Do not skip this step."
+  }
 }
 JSON
 exit 0

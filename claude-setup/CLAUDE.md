@@ -56,7 +56,8 @@ ALWAYS keep this rhythm.
 - Commit the passing test + implementation
 
 ## Exhale: Simplify (REFACTOR)
-- After the feature works, run `/simplify-with-analysis` to review for design quality (wraps `/simplify` with a rubycritic regression check against `main`)
+- After the feature works, run `bin/diff-quality` to check for rubycritic regressions and run related specs against `main`
+- For a deeper design review (spawns subagents, higher token cost), the user can run `/simplify-with-analysis` explicitly
 - Look for:
   - Duplicate code, unnecessary abstraction, coupling introduced, naming that drifted
   - **Inline ERB markup that mirrors patterns elsewhere** — palette cards, font cards, decoration buttons, toggle switches, swatch grids, selectable items, panels. Cross-view duplication is the primary signal that a `UI.*` helper is needed. If a helper exists, swap to it; if not, extract one.

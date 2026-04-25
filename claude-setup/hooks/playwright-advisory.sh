@@ -1,7 +1,12 @@
 #!/bin/bash
-# playwright-advisory.sh - Load manual testing skill when Playwright is used
+# playwright-advisory.sh - Load manual testing skill when Playwright is used.
+# Per-session sentinel under tmp/.claude-advisory/<session_id>/.
 
-SENTINEL="$CLAUDE_PROJECT_DIR/tmp/.claude-advisory-playwright"
+INPUT=$(cat 2>/dev/null || true)
+SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // ""' 2>/dev/null)
+SESSION_SLUG="${SESSION_ID:-unknown-session}"
+
+SENTINEL="$CLAUDE_PROJECT_DIR/tmp/.claude-advisory/$SESSION_SLUG/playwright"
 [ -f "$SENTINEL" ] && exit 0
 mkdir -p "$(dirname "$SENTINEL")" && touch "$SENTINEL"
 

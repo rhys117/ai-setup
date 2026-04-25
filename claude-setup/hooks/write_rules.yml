@@ -1,0 +1,90 @@
+# Content + advisory rules enforced by .claude/hooks/write-rules-check.rb on
+# Edit / MultiEdit / Write tool calls.
+#
+# Each rule:
+#   type:              "block" (deny tool call) or "warn" (inject context)
+#   pattern:           Optional Ruby regex matched against the new content.
+#                      Omit to fire on file-glob match alone.
+#   context:           Message returned to Claude.
+#   files:             Globs (relative to project root, ** supported).
+#   once_per_session:  Optional, warn-only. When true the rule fires at most
+#                      once per session (sentinel under tmp/.claude-advisory/).
+#                      Block rules ignore this flag.
+#
+# Block rules surface as permissionDecision: deny + permissionDecisionReason.
+# Warn rules surface as additionalContext.
+
+no_default_scope:
+  type: block
+  pattern: '(?<!\w)default_scope(?!\w)'
+  context: >
+    We do not allow default scopes to be used. Depending on your use-case
+    consider using something like `active`, `inactive` and `all` with
+    enforcement at the call sites instead.
+  files:
+    - 'app/models/**/*'
+
+view_edit_advisory:
+  type: warn
+  once_per_session: true
+  context: >
+    Editing a view/component file. Rules: (1) Use UI.* components
+    (UI.container, UI.panel, UI.card, etc.) instead of raw HTML. Run
+    /ui-components for full reference. (2) Use semantic color palette names:
+    neutral, warm, app-primary, app-secondary, app-accent, app-danger, warning
+    (shades 50-900). Never use raw Tailwind colors (gray-500, rose-600). Do
+    not confuse with dynamic theming classes (dynamic-primary, bg-dynamic-accent)
+    which are for guest-facing event templates.
+  files:
+    - 'app/views/**/*'
+    - 'app/components/**/*'
+    - '**/*.erb'
+
+service_design_advisory:
+  type: warn
+  once_per_session: true
+  context: >
+    You are creating or editing a service object. STOP and verify this belongs
+    here. Services in app/services/ must encapsulate meaningful cross-aggregate
+    domain operations (DDD). If this service only wraps .save, .update, or
+    .create on a single model, it belongs in the model or controller — not here.
+    Ask: does this coordinate behavior across multiple aggregates? If not, move
+    the logic closer to the model. Also consider: could this be a model method,
+    a callback, or a concern instead?
+  files:
+    - 'app/services/**/*'
+
+controller_design_advisory:
+  type: warn
+  once_per_session: true
+  context: >
+    Editing a controller. If you're about to override a CRUDResource action
+    (create/update/destroy) to add a precondition, stop and ask: can this be a
+    validation on the model? Controllers including CRUDResource route invalid
+    records through handle_failed_save, which already renders form errors with
+    a flash. A `validate :foo` on the model covers every save path (form, API,
+    console, other controllers) — a controller override only covers this one.
+    Reserve controller overrides for request-specific concerns (auth, params
+    shaping, response format).
+  files:
+    - 'app/controllers/**/*.rb'
+
+migration_design_advisory:
+  type: warn
+  once_per_session: true
+  context: >
+    Editing a migration. STOP and confirm before proceeding: (1) PERSISTENCE
+    NECESSARY? Walk the data's lifecycle — ephemeral (params), session, user
+    pref (jsonb), or genuine domain state. If it's 1-2, do not persist; ask the
+    user if unsure. (2) BOOLEAN? Only for a real two-state flag with no
+    foreseeable third state. Prefer status enums or timestamps (activated_at,
+    archived_at) — they carry more information and leave room to grow.
+    (3) NAMING — drop table-name prefixes on columns (posts.post_title →
+    posts.title; shared_photo_configurations.poster_prompt_line → .prompt_line).
+    Apply the same rule to associations. (4) ARRAY/JSONB — flexible but not
+    query-friendly; reach for a join table if you'll ever filter/count by
+    individual entries. (5) BACKFILL — never combine a NOT NULL add + data
+    backfill in one migration on an existing table. Run /database-conventions
+    for the full checklist.
+  files:
+    - 'db/migrate/**/*.rb'
