@@ -5,7 +5,17 @@
 #   type:              "block" (deny tool call) or "warn" (inject context)
 #   pattern:           Optional Ruby regex matched against the new content.
 #                      Omit to fire on file-glob match alone.
-#   context:           Message returned to Claude.
+#   context:           Static message returned to Claude.
+#   context_script:    Optional path (relative to project root) to a script
+#                      that emits the context dynamically. Receives
+#                      CLAUDE_FILE_PATH, CLAUDE_RELATIVE_PATH, and
+#                      CLAUDE_SESSION_ID via env. Stdout protocol:
+#                        - Optional first line: "#sentinel-suffix:<value>"
+#                          (suffix is appended to the per-session sentinel
+#                          key, enabling per-target once_per_session).
+#                        - Remaining lines: the context body.
+#                      Empty body suppresses the rule. Overrides static
+#                      `context` when both are set.
 #   files:             Globs (relative to project root, ** supported).
 #   once_per_session:  Optional, warn-only. When true the rule fires at most
 #                      once per session (sentinel under tmp/.claude-advisory/).
@@ -68,6 +78,14 @@ controller_design_advisory:
     shaping, response format).
   files:
     - 'app/controllers/**/*.rb'
+
+model_wrapper_delegation:
+  type: warn
+  once_per_session: true
+  pattern: '^\s*def\s+\w+'
+  files:
+    - 'app/models/*.rb'
+  context_script: '.claude/hooks/model-wrappers-context.sh'
 
 migration_design_advisory:
   type: warn
